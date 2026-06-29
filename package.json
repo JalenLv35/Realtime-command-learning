@@ -1,0 +1,17 @@
+{
+  "name": "realtime-command-learning",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Realtime learning log for Bash commands executed by coding agents.",
+  "scripts": {
+    "explain": "node src/cli.mjs",
+    "demo": "node src/cli.mjs \"curl -s -X POST http://127.0.0.1:4317/api/control/start\"",
+    "serve": "node src/server.mjs",
+    "hook:test": "printf '%s' '{\"tool_input\":{\"command\":\"curl -s -X POST http://127.0.0.1:4317/api/control/start\"}}' | node hooks/pre-tool-use.mjs",
+    "check": "node --check src/cli.mjs && node --check hooks/pre-tool-use.mjs && node --check src/server.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
