@@ -1,7 +1,35 @@
 const eventsEl = document.querySelector("#events");
 const statusEl = document.querySelector("#status");
+const modeBtns = document.querySelectorAll(".mode-btn");
 
 let autoScroll = true;
+let currentMode = localStorage.getItem("cl-mode") || "beginner";
+
+// --- Mode logic ---
+
+const MIN_LEVEL = { beginner: 1, intermediate: 2, expert: 3 };
+
+function applyMode(mode) {
+  currentMode = mode;
+  localStorage.setItem("cl-mode", mode);
+
+  modeBtns.forEach((btn) => {
+    btn.classList.toggle("active", btn.dataset.mode === mode);
+  });
+
+  const minLevel = MIN_LEVEL[mode] ?? 1;
+  document.querySelectorAll(".event[data-level]").forEach((el) => {
+    const level = Number(el.dataset.level);
+    el.classList.toggle("hidden", level < minLevel);
+  });
+}
+
+modeBtns.forEach((btn) => {
+  btn.addEventListener("click", () => applyMode(btn.dataset.mode));
+});
+
+// Apply saved mode on load
+applyMode(currentMode);
 
 // --- SSE connection ---
 
@@ -37,6 +65,14 @@ function appendEvent(event) {
   const el = renderEvent(event);
   if (!el) return;
 
+  // Apply current mode filter
+  if (el.dataset.level) {
+    const minLevel = MIN_LEVEL[currentMode] ?? 1;
+    if (Number(el.dataset.level) < minLevel) {
+      el.classList.add("hidden");
+    }
+  }
+
   eventsEl.appendChild(el);
 
   if (autoScroll) {
@@ -56,19 +92,25 @@ function renderEvent(event) {
 
 function renderExplained(event) {
   const hasRisk = event.risks?.length > 0;
-  const article = el("article", { class: `event${hasRisk ? " has-risk" : ""}` });
+  const level = event.level ?? 2;
+
+  const article = el("article", {
+    class: `event${hasRisk ? " has-risk" : ""}`,
+    "data-level": level
+  });
 
   const time = event.createdAt
     ? new Date(event.createdAt).toLocaleTimeString("zh-CN", { hour12: false })
     : "";
 
   const firstToken = (event.command ?? "").match(/\S+/)?.[0] ?? "";
+  const levelLabel = ["", "基础", "进阶", "高级"][level] ?? "";
 
   article.appendChild(
     el("div", { class: "event-meta" }, [
       text(`${time} `),
       el("span", { class: "cmd-name" }, [text(firstToken)]),
-      text(event.source === "hook" ? " · hook" : " · manual")
+      text(` · ${levelLabel}`)
     ])
   );
 

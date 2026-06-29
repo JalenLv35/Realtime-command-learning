@@ -15,7 +15,8 @@ export function writeLearningRecord(record, options = {}) {
       cwd: record.cwd,
       createdAt: record.createdAt,
       explanation: record.explanation,
-      risks: record.risks
+      risks: record.risks,
+      level: record.level
     })}\n`,
     "utf8"
   );
@@ -32,9 +33,10 @@ function renderMarkdown(record) {
   });
 
   const firstToken = record.command.match(/\S+/)?.[0] ?? "command";
+  const levelLabel = ["", "基础", "进阶", "高级"][record.level] ?? "";
 
   const lines = [
-    `## ${time} \`${firstToken}\``,
+    `## ${time} \`${firstToken}\` ${levelLabel ? `· ${levelLabel}` : ""}`,
     "",
     "```bash",
     record.command,

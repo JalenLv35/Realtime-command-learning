@@ -1,5 +1,8 @@
+// level 1 = 基础（ls/cat/mkdir 等），level 2 = 进阶（git/npm/curl 等），level 3 = 高级/风险（sudo/rm/kill 等）
+
 export const commandRules = {
   curl: {
+    level: 2,
     summary: "curl 用于向 URL 发起网络请求，也常用于下载内容或调用 HTTP API。",
     flags: {
       "-s": "silent 模式，隐藏进度条和非必要输出。",
@@ -30,6 +33,7 @@ export const commandRules = {
   },
 
   wget: {
+    level: 2,
     summary: "wget 用于从网络下载文件，支持 HTTP、HTTPS、FTP 协议。",
     flags: {
       "-q": "安静模式，减少输出。",
@@ -41,6 +45,7 @@ export const commandRules = {
   },
 
   git: {
+    level: 2,
     summary: "git 用于管理代码版本和仓库历史。",
     flags: {
       "--short": "用更简短的格式显示结果。",
@@ -84,6 +89,7 @@ export const commandRules = {
   },
 
   ls: {
+    level: 1,
     summary: "ls 用于列出目录内容。",
     flags: {
       "-l": "使用长格式显示权限、大小、时间等信息。",
@@ -97,6 +103,7 @@ export const commandRules = {
   },
 
   cat: {
+    level: 1,
     summary: "cat 用于输出文件内容，也常用于把多个文件内容串接起来。",
     flags: {
       "-n": "给每行加上行号。",
@@ -105,6 +112,7 @@ export const commandRules = {
   },
 
   grep: {
+    level: 2,
     summary: "grep 用于在文件或输入中搜索匹配指定模式的行。",
     flags: {
       "-r": "递归搜索目录中的所有文件。",
@@ -130,6 +138,7 @@ export const commandRules = {
   },
 
   rg: {
+    level: 2,
     summary: "rg 是 ripgrep，比 grep 更快的文件内容搜索工具，默认忽略 .gitignore 中的文件。",
     flags: {
       "-n": "显示匹配结果所在行号。",
@@ -149,6 +158,7 @@ export const commandRules = {
   },
 
   find: {
+    level: 2,
     summary: "find 用于在目录树中按条件查找文件或目录。",
     flags: {
       "-name": "按文件名匹配，支持通配符，例如 '*.js'。",
@@ -168,6 +178,7 @@ export const commandRules = {
   },
 
   rm: {
+    level: 3,
     summary: "rm 用于删除文件或目录，操作不可逆，无法通过回收站找回。",
     flags: {
       "-r": "递归删除目录及其所有内容。",
@@ -181,6 +192,7 @@ export const commandRules = {
   },
 
   cp: {
+    level: 1,
     summary: "cp 用于复制文件或目录。",
     flags: {
       "-r": "递归复制整个目录。",
@@ -194,6 +206,7 @@ export const commandRules = {
   },
 
   mv: {
+    level: 1,
     summary: "mv 用于移动文件或目录，也用于重命名。",
     flags: {
       "-n": "目标文件已存在时不覆盖。",
@@ -204,6 +217,7 @@ export const commandRules = {
   },
 
   mkdir: {
+    level: 1,
     summary: "mkdir 用于创建目录。",
     flags: {
       "-p": "递归创建多层目录，目录已存在时不报错。",
@@ -214,6 +228,7 @@ export const commandRules = {
   },
 
   chmod: {
+    level: 2,
     summary: "chmod 用于修改文件或目录的读写执行权限。",
     flags: {
       "+x": "给文件添加可执行权限，常用于脚本文件。",
@@ -226,6 +241,7 @@ export const commandRules = {
   },
 
   ps: {
+    level: 2,
     summary: "ps 用于查看当前运行的进程列表。",
     flags: {
       "-aux": "显示所有用户的所有进程，包含详细信息（BSD 风格）。",
@@ -236,6 +252,7 @@ export const commandRules = {
   },
 
   kill: {
+    level: 3,
     summary: "kill 用于向指定进程发送信号，默认发送 SIGTERM（15）请求进程退出。",
     flags: {
       "-9": "发送 SIGKILL 信号，强制终止进程，进程无法捕获或忽略此信号。",
@@ -246,6 +263,7 @@ export const commandRules = {
   },
 
   lsof: {
+    level: 3,
     summary: "lsof 用于列出当前打开的文件，也常用于查看端口占用情况。",
     flags: {
       "-i": "列出与网络相关的文件，例如 -i :3000 查看占用 3000 端口的进程。",
@@ -257,10 +275,12 @@ export const commandRules = {
   },
 
   sudo: {
+    level: 3,
     summary: "sudo 允许当前用户以超级用户（root）或其他用户的身份执行命令。"
   },
 
   ssh: {
+    level: 2,
     summary: "ssh 用于通过加密连接登录远程机器或执行远程命令。",
     flags: {
       "-i": "指定用于认证的私钥文件路径。",
@@ -273,6 +293,7 @@ export const commandRules = {
   },
 
   npm: {
+    level: 2,
     summary: "npm 用于管理 Node.js 项目的依赖和脚本。",
     flags: {
       "--save-dev": "把依赖安装到 devDependencies（开发依赖）。",
@@ -300,10 +321,12 @@ export const commandRules = {
   },
 
   npx: {
+    level: 2,
     summary: "npx 用于执行 npm 包中的命令，包不存在时会临时下载并执行。"
   },
 
   pnpm: {
+    level: 2,
     summary: "pnpm 是 npm 的替代品，使用硬链接和符号链接共享依赖，节省磁盘空间且速度更快。",
     subcommands: {
       install: "安装项目依赖。",
@@ -317,6 +340,7 @@ export const commandRules = {
   },
 
   yarn: {
+    level: 2,
     summary: "yarn 是 npm 的替代品，提供更快的安装速度和确定性依赖。",
     subcommands: {
       install: "安装所有依赖。",
@@ -328,6 +352,7 @@ export const commandRules = {
   },
 
   node: {
+    level: 1,
     summary: "node 用于运行 JavaScript 文件或脚本。",
     flags: {
       "--check": "只检查语法，不实际执行文件。",
@@ -340,6 +365,7 @@ export const commandRules = {
   },
 
   python: {
+    level: 1,
     summary: "python 用于运行 Python 脚本或进入 Python 交互环境。",
     flags: {
       "-m": "以模块方式运行，例如 python -m http.server 启动内置 HTTP 服务器。",
@@ -349,6 +375,7 @@ export const commandRules = {
   },
 
   pip: {
+    level: 2,
     summary: "pip 是 Python 的包管理工具，用于安装和管理 Python 包。",
     subcommands: {
       install: "安装指定的 Python 包。",
@@ -365,6 +392,7 @@ export const commandRules = {
   },
 
   docker: {
+    level: 2,
     summary: "docker 用于构建、运行和管理容器。",
     subcommands: {
       run: "创建并启动一个容器。",

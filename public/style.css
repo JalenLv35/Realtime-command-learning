@@ -71,6 +71,27 @@ body {
   gap: 4px;
 }
 
+.mode-btn {
+  background: #161b22;
+  border: 1px solid #30363d;
+  border-radius: 4px;
+  color: #8b949e;
+  font-family: inherit;
+  font-size: 12px;
+  padding: 3px 10px;
+  cursor: pointer;
+  transition: color 0.1s, border-color 0.1s, background 0.1s;
+}
+
+.mode-btn:hover { border-color: #58a6ff; color: #c9d1d9; }
+
+.mode-btn.active {
+  background: #1f3a5f;
+  border-color: #58a6ff;
+  color: #58a6ff;
+  font-weight: 600;
+}
+
 .events {
   flex: 1;
   overflow-y: auto;

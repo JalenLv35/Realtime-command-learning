@@ -59,6 +59,9 @@ export function explainCommand(command, options = {}) {
     }
   }
 
+  const risks = detectRisks(redactedCommand);
+  const level = computeLevel(firstCommand, rule, risks, redactedCommand);
+
   return {
     id: options.id ?? `cmd_${Date.now()}`,
     source: options.source ?? "manual",
@@ -67,8 +70,24 @@ export function explainCommand(command, options = {}) {
     cwd: options.cwd ?? process.cwd(),
     createdAt: new Date().toISOString(),
     explanation: dedupeItems(items),
-    risks: detectRisks(redactedCommand)
+    risks,
+    level
   };
+}
+
+function computeLevel(firstCommand, rule, risks, command) {
+  // Any risk detected → always level 3
+  if (risks.length > 0) return 3;
+
+  // Start from the rule's declared level (default 2 for unknown commands)
+  let level = rule?.level ?? 2;
+
+  // Pipes bump complexity up by one
+  if (/\|/.test(command)) {
+    level = Math.min(level + 1, 3);
+  }
+
+  return level;
 }
 
 function needsValue(flag, commandName) {
