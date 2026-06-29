@@ -14,6 +14,7 @@ export function writeLearningRecord(record, options = {}) {
       command: record.command,
       cwd: record.cwd,
       createdAt: record.createdAt,
+      explanation: record.explanation,
       risks: record.risks
     })}\n`,
     "utf8"
@@ -23,8 +24,17 @@ export function writeLearningRecord(record, options = {}) {
 }
 
 function renderMarkdown(record) {
+  const time = new Date(record.createdAt).toLocaleTimeString("zh-CN", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false
+  });
+
+  const firstToken = record.command.match(/\S+/)?.[0] ?? "command";
+
   const lines = [
-    `## ${record.createdAt} ${record.source === "hook" ? "(hook)" : "(manual)"}`,
+    `## ${time} \`${firstToken}\``,
     "",
     "```bash",
     record.command,
@@ -38,6 +48,10 @@ function renderMarkdown(record) {
     lines.push(`- \`${item.label}\`: ${item.text}`);
   }
 
+  if (!record.explanation.length) {
+    lines.push("- 暂未识别，可补充规则。");
+  }
+
   if (record.originalCommandWasRedacted) {
     lines.push("", "**隐私处理**", "", "- 这条命令包含疑似敏感信息，已在学习文档中脱敏。");
   }
@@ -45,7 +59,8 @@ function renderMarkdown(record) {
   if (record.risks.length) {
     lines.push("", "**风险提示**", "");
     for (const risk of record.risks) {
-      lines.push(`- ${risk.text}`);
+      const levelLabel = risk.level === "high" ? "高风险" : "中风险";
+      lines.push(`- **[${levelLabel}]** ${risk.text}`);
     }
   }
 

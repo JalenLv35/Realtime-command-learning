@@ -1,0 +1,30 @@
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node PLUGIN_DIR/hooks/pre-tool-use.mjs",
+            "timeout": 10,
+            "background": true
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node PLUGIN_DIR/hooks/post-tool-use.mjs",
+            "timeout": 10,
+            "background": true
+          }
+        ]
+      }
+    ]
+  }
+}
